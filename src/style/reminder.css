@@ -1,0 +1,72 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    width: 100%;
+    height: 100vh;
+    background-image: url("../img/fields_full.jpg");
+    background-size: cover;
+    position: relative;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.content{
+    position: absolute;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.reminders{
+    width: 50em;
+    height: 500px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    margin-top: 50px;
+    overflow: auto;
+}
+
+
+.reminder{
+    margin-left: 10px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    width: 15em;
+    height: 13em; 
+    position: relative
+    
+}
+
+.reminder .buttons{
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+}
+
+.reminder button{
+    width: 15em;
+    cursor: pointer;
+    background-color: #f79990;
+    border: none;
+    transition: 0.5s;
+}
+
+.reminder button:hover{
+    transform: scale(1.1);
+}
+
+.reminder button img{
+    width: 1.5em;
+}
