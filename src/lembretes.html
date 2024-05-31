@@ -5,21 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lembretes</title>
     <link rel="stylesheet" href="style/reminder.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    
     <div class="container">
+        <img class="top-left" src="img/esquerda.gif" alt="">
+        <img class="top-right" src="img/direita.gif" alt="">
+        <img class="bottom-right" src="img/bottom-right.gif" alt="">
         <div class="content">
             <div class="header">
                 
             </div>
             <div class="form">
                 <form action="">
-                    <textarea name="" id="" cols="80" rows="5"></textarea>
-                    <button>Enviar</button>
+                    <textarea name="" id="" cols="80" rows="5" maxlength="255"></textarea>
+                    <button><p>+</p></button>
                 </form>
             </div>
             <div class="reminders">
                 <div class="reminder">
+                    <div class="task">
+                       Eu tenho que fazer tal coisa para entregar na sexta-feira que vem
+                    </div>
                     <div class="buttons">
                         <button> <img src="img/lapis.png" > </button>
                         <button><img src="img/lixeira-de-reciclagem.png" ></button>
@@ -27,6 +35,9 @@
                 </div>
 
                 <div class="reminder">
+                    <div class="task">
+                        Eu tenho que fazer tal coisa para entregar na sexta-feira que vem
+                     </div>
                     <div class="buttons">
                         <button> <img src="img/lapis.png" ></button>
                         <button><img src="img/lixeira-de-reciclagem.png" ></button>
@@ -34,6 +45,9 @@
                 </div>
 
                 <div class="reminder">
+                    <div class="task">
+                        Eu tenho que fazer tal coisa para entregar na sexta-feira que vem
+                     </div>
                     <div class="buttons">
                         <button> <img src="img/lapis.png" > </button>
                         <button><img src="img/lixeira-de-reciclagem.png" ></button>
@@ -41,6 +55,9 @@
                 </div>
 
                 <div class="reminder">
+                    <div class="task">
+                        Eu tenho que fazer tal coisa para entregar na sexta-feira que vem
+                     </div>
                     <div class="buttons">
                         <button> <img src="img/lapis.png" > </button>
                         <button><img src="img/lixeira-de-reciclagem.png" ></button>
@@ -48,6 +65,9 @@
                 </div>
 
                 <div class="reminder">
+                    <div class="task">
+                        Eu tenho que fazer tal coisa para entregar na sexta-feira que vem
+                     </div>
                     <div class="buttons">
                         <button> <img src="img/lapis.png" > </button>
                         <button><img src="img/lixeira-de-reciclagem.png" ></button>
@@ -55,17 +75,34 @@
                 </div>
 
                 <div class="reminder">
+                    <div class="task">
+                        Eu tenho que fazer tal coisa para entregar na sexta-feira que vem
+                     </div>
                     <div class="buttons">
                         <button> <img src="img/lapis.png" > </button>
                         <button><img src="img/lixeira-de-reciclagem.png" ></button>
                     </div>
                 </div>
-
-         
-
-                
             </div>
         </div>
+        <div id="janelaEdicao">
+            <button id="fechar">
+                <i class="fa fa-remove"></i>
+            </button>
+    
+            <h2 id="IdTarefaEdicao">#111</h2>
+    
+            <hr>
+    
+            <form action="">
+                <textarea name="" id="" cols="80" rows="2" maxlength="255"></textarea>
+                <button id="btnAtualiza">Salvar</button>
+            </form>
+            
+        </div>
+    
+        <div id="janelaEdicaoFundo"></div>
     </div>
+    
 </body>
 </html>

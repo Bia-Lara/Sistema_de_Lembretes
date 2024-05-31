@@ -1,17 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/school-play');
+
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-optical-sizing: auto;
+}
+
+
+.top-left{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15em;
+}
+
+.top-right{
+    position: absolute;
+    top: 0;
+    right:0;
+    width: 22em;
+}
+
+.bottom-right{
+    position: absolute;
+    bottom: 0;
+    right:0;
+    width: 25em;
 }
 
 .container{
     width: 100%;
     height: 100vh;
-    background-image: url("../img/fields_full.jpg");
-    background-size: cover;
-    position: relative;
-    background-repeat: no-repeat;
-    overflow: hidden;
+    background-color: #F4F6FC;
+    
 }
 
 .content{
@@ -23,12 +46,50 @@
     
 }
 
+form{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+}
+
+textarea{
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #99ABF7;
+    color: white;
+    box-shadow: 0 2px 0 #0056b3;
+}
+
+form button{
+    border: none;
+    width: 5em;
+    height: 5em;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #99ABF7;
+    color: white;
+    margin-top: 15px;
+}
+
+form button p{
+    font-size: 3.5em;
+}
+
+form button:active{
+    box-shadow: 0 2px 0 #0056b3;
+    transform: translateY(3px);
+}
+
 .reminders{
-    width: 50em;
+    width: 100%;
     height: 500px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
+    justify-content: center;
     margin-top: 50px;
     overflow: auto;
 }
@@ -39,8 +100,21 @@
     margin-bottom: 15px;
     background-color: #fff;
     width: 15em;
-    height: 13em; 
-    position: relative
+    height: 13em;
+    
+    position: relative;
+    box-shadow: 2px 2px 1px #0056b3;
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.reminder .task{
+    height: 158px;
+    overflow: auto;
+    font-size: 1.2em;
+    padding: 10px; 
+    font-family: "Outfit", sans-serif;
     
 }
 
@@ -58,7 +132,7 @@
 .reminder button{
     width: 15em;
     cursor: pointer;
-    background-color: #f79990;
+    background-color: #99ABF7;
     border: none;
     transition: 0.5s;
 }
@@ -70,3 +144,97 @@
 .reminder button img{
     width: 1.5em;
 }
+
+
+
+
+#janelaEdicaoFundo{
+    position: fixed;
+    top: 0;
+    background-color: #fff;
+    bottom: 0;
+    left: 0;
+    opacity: 0.8;
+    z-index: 100;
+    right: 0;
+    display: none;
+}
+
+
+#janelaEdicao{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 3px solid #99ABF7;
+    width: 415px;
+    border-radius: 15px;
+    border-style: dashed;
+    z-index: 200;
+    display: none;
+}
+
+
+#janelaEdicao h2{
+    font-family: 'School Play', sans-serif;
+    margin-bottom: 15px;
+    padding: 5px;
+    color: #99ABF7;
+    letter-spacing: 1px;
+    
+}
+
+#janelaEdicao img{
+    width: 30px;
+}
+
+
+#fechar{
+    position: absolute;
+    top: -25px;
+    right: -15px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #99ABF7;
+    background: #99ABF7;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+}
+
+#janelaEdicao form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+
+
+#janelaEdicao textarea{
+    width: 100%;
+    color: #000;
+    border: 1px solid #AACFC3;
+    background-color: #ffff;
+    font-size: 0.8rem;
+    font-family: 'Dancing Script', cursive;
+    
+}
+
+#janelaEdicao form button{
+    width: 6em;
+    height: 2em;
+    background: #99ABF7;
+    border: 1px solid #0d5fb7;
+    padding: 8px;
+    border-radius: 15px;
+    color: #ffff;
+    cursor: pointer;
+    font-size: 1.2rem;
+    outline: none;
+}
+
+
