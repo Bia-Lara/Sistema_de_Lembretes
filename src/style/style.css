@@ -1,36 +1,62 @@
-@import url('https://fonts.cdnfonts.com/css/sony-sketch-ef');
-
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 *{
     margin: 0;
     padding: 0;
     border: 0;
     box-sizing: border-box;
+    font-family: 'Outfit';
 }
 .container {
     width: auto;
     height: 100vh;
-    background-image: url('../img/fields_full.jpg');
-    background-size: cover;
-    position: relative;
-    overflow: hidden;
+    background-color: #F4F6FC;
 }
 
 .container button{
     margin: 10px;
     padding: 10px;
-    width: 8em;
+    width: 5em;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 1.2em;
-    font-family: 'Sony Sketch EF', sans-serif;
-    background-color: #FBB101;
-    box-shadow: 5px 5px  #d39400;;
-    color: #011E46;
+    font-size: 0.8em;
+    font-family: 'Outfit';
+    background-color: #99ABF7;
+    box-shadow: 5px 5px  #0056b3;
+    color: #fff;
     transition: 0.5s;
+    position: absolute;
 }
 
 .container button:hover{
     transform: scale(1.1);
+}
+
+#top-left{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25em;
+}
+
+#top-right{
+    position: absolute;
+    top: 0;
+    right:0;
+    width: 18em;
+}
+
+#bottom-right{
+    position: absolute;
+    bottom: 0;
+    right:0;
+    width: 25em;
+}
+
+#bottom-left{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    width: 25em;
 }
 
 .content {
@@ -44,10 +70,12 @@
     transform: translate(-50%,-50%);
     z-index: 2;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 15px;
     border: 3px solid #ffff;
-    box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 1px #0056b3;
 }
+
+
 
 .form{
     position: absolute;
@@ -61,7 +89,7 @@
     top: -15%;
     left: 50%;
     transform: translate(-50%,-50%);
-    width: 10em;
+    width: 12em;
 }
 
 .cadastro img{
@@ -79,26 +107,24 @@
 }
 
 .form button{
+    position: relative;
     margin-top: 20px;
     width: 15em;
     padding: 10px;
-    background-color: #011E46;
+    background-color: #99ABF7;
     font-size: 1.2em;
-    font-family: 'Sony Sketch EF', sans-serif;
     cursor: pointer;
     border-radius: 10px;
     transition: 0.5s;
-    border-color: #011E46;
     color: #fff;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 5px 5px #0056b3;
     -webkit-transition: all 150ms ease-in-out;
     transition: all 150ms ease-in-out;
 }
 
 
 .form button:hover{
-    transform: scale(1);
-    box-shadow: 0 0 10px 0 #011E46 inset, 0 0 10px 4px #011E46;
+    transform: translateY(3px);
 }
 
 .form p{
