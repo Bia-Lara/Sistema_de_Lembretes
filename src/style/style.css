@@ -10,6 +10,7 @@
     width: auto;
     height: 100vh;
     background-color: #F4F6FC;
+    text-align: center;
 }
 
 .container button{
@@ -57,6 +58,12 @@
     bottom: 0;
     left:0;
     width: 25em;
+}
+
+h1{
+    font-size: 5em;
+    position: relative;
+    z-index: 1;
 }
 
 .content {

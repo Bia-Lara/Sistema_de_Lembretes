@@ -66,9 +66,9 @@ textarea{
 
 form button{
     border: none;
-    width: 5em;
-    height: 5em;
-    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
     cursor: pointer;
     background-color: #99ABF7;
     color: white;

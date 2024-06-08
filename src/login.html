@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login</title>
-<link rel="stylesheet" href="style/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style/style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -12,15 +13,23 @@
     <img id="top-right" src="img/top-right.gif" alt="">
     <img id="bottom-left" src="img/bottom-left.gif" alt="">
     <img id="bottom-right" src="img/bottom-right(2).gif" alt="">
+
+    <h1>Bem vindo(a)</h1>
     <div class="content">
-    <div class="form">
-        <img src="img/usuario.gif" alt="">
-        <input type="text" id="email" placeholder="E-mail">
-        <input type="password" id="password" placeholder="Senha">
-        <button>Login</button>
-        <p>Caso não tenha conta cadastre-se <a href="cadastro.html">Aqui</a></p>
-    </div>
+      <div class="form">
+          <img src="img/usuario.gif" alt="">
+          <form action="">
+
+            <input type="text" id="email" placeholder="E-mail" autocomplete="username">
+            <input type="password" id="password" placeholder="Senha" autocomplete="current-password">
+            <button>Login</button>
+          </form>
+          
+          <p>Caso não tenha conta cadastre-se <a href="cadastro.html">Aqui</a></p>
+      </div>
   </div>
 </div>
+
+  <script src="script/script.js"></script>
 </body>
 </html>
