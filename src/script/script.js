@@ -1,10 +1,59 @@
 
 let form = $("form")[0]
-let button = $("button")[0]
+let button = $("input button")[0]
+let logout = $("#logout")[0]
 let pathname= window.location.pathname
+console.log(pathname)
+form.addEventListener("submit", (e)=>{
+    e.preventDefault()
 
-form.addEventListener("submit", login)
-button.addEventListener("click", login)
+    if(pathname=="/src/login.html"){
+        login()
+    }
+
+    if(pathname=="/src/cadastro.html"){
+        register()
+    }
+
+    if(pathname=="/src/lembretes.html"){
+        registerReminder()
+    }
+})
+button.addEventListener("click", (e)=>{
+    e.preventDefault()
+
+    if(pathname=="/src/login.html"){
+        login()
+    }
+
+    if(pathname=="/src/cadastro.html"){
+        register()
+    }
+
+    if(pathname=="/src/lembretes.html"){
+        registerReminder()
+    }
+})
+
+logout.addEventListener("click", (e)=>{
+    $.ajax({
+        url: "https://ifsp.ddns.net/webservices/lembretes/usuario/logout",
+        type: "GET",
+        headers: {
+            'Authorization': 'Bearer ' + getToken()
+        },
+
+        success: function(msg){
+            console.log(msg)
+            window.location.href = "login.html"
+        },
+
+        error: function(request, status, erro){
+           console.log(erro)
+        }
+    })
+})
+
 
 $(document).ready(function() {
     $.ajax({
@@ -15,9 +64,7 @@ $(document).ready(function() {
         },
 
         success:function(msg){
-            console.log(msg)
             if(msg.msg=='Você está logado'){
-                console.log("foi")
                 updateToken()
             }
         },
@@ -29,9 +76,7 @@ $(document).ready(function() {
 
 })
 
-
-function login(e){
-    e.preventDefault()
+function login(){
     let email = $('#email').val();
     let senha = $('#password').val()
 
@@ -55,6 +100,29 @@ function login(e){
     })
 }
 
+function register(){
+    let email = $('#email').val();
+    let senha = $('#password').val()
+
+    $.ajax({
+        url: "https://ifsp.ddns.net/webservices/lembretes/usuario/signup",
+        type: "POST",
+        
+        data: {
+            "login":email,
+            "senha": senha
+        },
+
+        success: function(msg){
+            setToken(msg.token)
+            window.location.href = "lembretes.html"
+        },
+
+        error: function(request, status, erro){
+            alert("Usuário ja cadastrado!!")
+        }
+    })
+}
 
 function updateToken(){
     $.ajax({
@@ -75,7 +143,6 @@ function updateToken(){
         }
     })
 }
-
 
 function setToken(token){
     if (typeof(Storage) !== "undefined") {
