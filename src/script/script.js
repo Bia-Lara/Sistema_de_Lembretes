@@ -1,23 +1,26 @@
 
 let form = $("form")[0]
-let button = $("input button")[0]
-let logout = $("#logout")[0]
+let button = $(".buttonForm")[0]
+let logout
 let pathname= window.location.pathname
-console.log(pathname)
+
 form.addEventListener("submit", (e)=>{
     e.preventDefault()
-
+    
     if(pathname=="/src/login.html"){
         login()
     }
 
     if(pathname=="/src/cadastro.html"){
+        
         register()
     }
 
     if(pathname=="/src/lembretes.html"){
         registerReminder()
     }
+
+    
 })
 button.addEventListener("click", (e)=>{
     e.preventDefault()
@@ -35,27 +38,39 @@ button.addEventListener("click", (e)=>{
     }
 })
 
-logout.addEventListener("click", (e)=>{
-    $.ajax({
-        url: "https://ifsp.ddns.net/webservices/lembretes/usuario/logout",
-        type: "GET",
-        headers: {
-            'Authorization': 'Bearer ' + getToken()
-        },
+if(pathname=="/src/lembretes.html"){
+    logout = $("#logout")[0]
 
-        success: function(msg){
-            console.log(msg)
-            window.location.href = "login.html"
-        },
-
-        error: function(request, status, erro){
-           console.log(erro)
-        }
+    logout.addEventListener("click", (e)=>{
+        $.ajax({
+            url: "https://ifsp.ddns.net/webservices/lembretes/usuario/logout",
+            type: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + getToken()
+            },
+    
+            success: function(msg){
+                console.log(msg)
+                window.location.href = "login.html"
+            },
+    
+            error: function(request, status, erro){
+               console.log(erro)
+            }
+        })
     })
-})
-
+}
 
 $(document).ready(function() {
+    if(pathname=="/src/login.html" || pathname=="/src/cadastro.html"){
+        $('#email').inputmask({
+            alias: "email",
+            clearIncomplete: true
+            
+        });
+    }
+    
+    
     $.ajax({
         url:"https://ifsp.ddns.net/webservices/lembretes/usuario/check",
         type: "GET",
@@ -64,8 +79,11 @@ $(document).ready(function() {
         },
 
         success:function(msg){
-            if(msg.msg=='Você está logado'){
-                updateToken()
+            console.log(msg)
+            if(pathname=="/src/login.html"){
+                if(msg.msg=='Você está logado'){
+                    updateToken()
+                }
             }
         },
 
@@ -77,51 +95,76 @@ $(document).ready(function() {
 })
 
 function login(){
-    let email = $('#email').val();
-    let senha = $('#password').val()
+    let email = $('#email')
+    let senha = $('#password')
+    let span = $("span")[0]
 
-    $.ajax({
-        url: "https://ifsp.ddns.net/webservices/lembretes/usuario/login",
-        type: "POST",
-        
-        data: {
-            "login":email,
-            "senha": senha
-        },
+    if(email.val()=="" || senha.val()==""){
+        span.innerHTML = `Por favor preencha todos os campos! `
+        span.style.display="block"
+    }else{
+        $.ajax({
+            url: "https://ifsp.ddns.net/webservices/lembretes/usuario/login",
+            type: "POST",
+            
+            data: {
+                "login":email.val(),
+                "senha": senha.val()
+            },
+            
+            success: function(msg){
+                setToken(msg.token)
+                window.location.href = "lembretes.html"
+            },
 
-        success: function(msg){
-            setToken(msg.token)
-            window.location.href = "lembretes.html"
-        },
+            error: function(request, status, erro){
+            span.innerHTML="Essa conta não existe!"
+            span.style.display= "block"
+            email.val("")
+            senha.val("")
+            }
+        })
+    }
 
-        error: function(request, status, erro){
-            alert("Essa conta não existe! Por favor cadastre-se em nosso site!")
-        }
-    })
+    
 }
 
 function register(){
     let email = $('#email').val();
     let senha = $('#password').val()
+    let span= $("span")[0]
 
-    $.ajax({
-        url: "https://ifsp.ddns.net/webservices/lembretes/usuario/signup",
-        type: "POST",
-        
-        data: {
-            "login":email,
-            "senha": senha
-        },
+    let senhaValida = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
+    if(email=="" || senha==""){
+        span.innerHTML = `Por favor preencha todos os campos! `
+        span.style.display="block"
+    }
+    else if(!senhaValida.test(senha)){
+        span.innerHTML = `Por favor insira uma senha válida<br>*Mínimo 6 caracteres<br>*Mínimo uma letra maiúscula<br>*Mínimo um número<br>*Mínimo um caractere Especial `
+       
+        span.style.display="block"
+    }else{
+        $.ajax({
+            url: "https://ifsp.ddns.net/webservices/lembretes/usuario/signup",
+            type: "POST",
+            
+            data: {
+                "login":email,
+                "senha": senha
+            },
 
-        success: function(msg){
-            setToken(msg.token)
-            window.location.href = "lembretes.html"
-        },
+            success: function(msg){
+                setToken(msg.token)
+                window.location.href = "lembretes.html"
+            },
 
-        error: function(request, status, erro){
-            alert("Usuário ja cadastrado!!")
-        }
-    })
+            error: function(request, status, erro){
+                console.log(erro)
+            }
+        })
+    }
+
+    
 }
 
 function updateToken(){

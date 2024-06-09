@@ -114,6 +114,11 @@ h1{
     font-size: 1.1rem;
 }
 
+.form span{
+    color: #fd0000;
+    display: none;
+}
+
 .form button{
     position: relative;
     margin-top: 20px;
