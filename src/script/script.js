@@ -59,6 +59,8 @@ if(pathname=="/src/lembretes.html"){
             }
         })
     })
+
+    startTokenTimer(180); // 180 segundos = 3 minutos
 }
 
 $(document).ready(function() {
@@ -69,7 +71,6 @@ $(document).ready(function() {
             
         });
     }
-    
     
     $.ajax({
         url:"https://ifsp.ddns.net/webservices/lembretes/usuario/check",
@@ -209,3 +210,22 @@ function getToken(){
 }
 
 
+function startTokenTimer(duration){
+    let timer = duration, minutes, seconds
+    let display = $("#timer")
+    let countdown = setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10)
+
+        minutes = minutes < 10 ? "0" + minutes : minutes
+        seconds = seconds < 10 ? "0" + seconds : seconds
+
+        display[0].textContent = `${minutes}:${seconds}`
+
+        if (--timer < 0) {
+            clearInterval(countdown)
+            alert('Seu token expirou. Por favor, faça login novamente.')
+            window.location.href = "login.html"
+        }
+    }, 1000);
+}

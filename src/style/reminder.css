@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import url('https://fonts.cdnfonts.com/css/school-play');
+@import url('https://fonts.cdnfonts.com/css/eunuch');
 
 *{
     padding: 0;
@@ -46,6 +47,15 @@
     left: 50%;
     transform: translate(-50%, -50%);
     
+}
+
+.timer{
+    position: absolute;
+    padding: 20px;
+    right: 0;
+    font-family: 'Eunuch', sans-serif;
+    font-size: 3em;
+    color: #fff;
 }
 
 .container #logout{
