@@ -4,6 +4,9 @@ let button = $(".buttonForm")[0]
 let logout
 let pathname= window.location.pathname
 
+
+//CHAMADAS DE FUNÇÕES---------------------------------------------------------------
+
 form.addEventListener("submit", (e)=>{
     e.preventDefault()
     
@@ -60,7 +63,15 @@ if(pathname=="/src/lembretes.html"){
         })
     })
 
-    startTokenTimer(180); // 180 segundos = 3 minutos
+    const expirationTime = getTokenExpirationTime();
+    if (expirationTime) {
+        const timeRemaining = Math.max(expirationTime - Date.now(), 0) / 1000;
+        startTokenTimer(timeRemaining);
+    } else {
+        startTokenTimer(180); // 180 segundos = 3 minutos
+    }
+
+    
 }
 
 $(document).ready(function() {
@@ -95,6 +106,9 @@ $(document).ready(function() {
 
 })
 
+
+//FUNÇÕES DE AUTENTICAÇÃO------------------------------------------------------------
+
 function login(){
     let email = $('#email')
     let senha = $('#password')
@@ -115,6 +129,7 @@ function login(){
             
             success: function(msg){
                 setToken(msg.token)
+                
                 window.location.href = "lembretes.html"
             },
 
@@ -156,6 +171,7 @@ function register(){
 
             success: function(msg){
                 setToken(msg.token)
+                setTokenExpirationTime(Date.now() + 180 * 1000);
                 window.location.href = "lembretes.html"
             },
 
@@ -168,6 +184,9 @@ function register(){
     
 }
 
+
+//FUNÇÕES DO TOKEN------------------------------------------------------------------
+
 function updateToken(){
     $.ajax({
         url:"https://ifsp.ddns.net/webservices/lembretes/usuario/renew",
@@ -179,6 +198,7 @@ function updateToken(){
         success: function(msg){
             console.log(msg.token)
             setToken(msg.token)
+            setTokenExpirationTime(Date.now() + 180 * 1000);
             window.location.href = "lembretes.html"
         },
 
@@ -209,6 +229,22 @@ function getToken(){
     }
 }
 
+function setTokenExpirationTime(expirationTime) {
+    if (typeof (Storage) !== "undefined") {
+        localStorage.setItem("tokenExpirationTime", expirationTime);
+    } else {
+        alert("Ocorreu um erro! Por favor Recarregue a página!")
+    }
+}
+
+function getTokenExpirationTime() {
+    if (typeof (Storage) !== "undefined") {
+        return parseInt(localStorage.getItem("tokenExpirationTime"), 10);
+    } else {
+        alert("Ocorreu um erro! Por favor Recarregue a página!")
+    }
+    return null;
+}
 
 function startTokenTimer(duration){
     let timer = duration, minutes, seconds
