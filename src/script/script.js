@@ -3,7 +3,7 @@ let form = $("form")[0]
 let button = $(".buttonForm")[0]
 let logout
 let pathname= window.location.pathname
-
+let notesUrl = "https://ifsp.ddns.net/webservices/lembretes/lembrete";
 
 //CHAMADAS DE FUNÇÕES---------------------------------------------------------------
 
@@ -82,6 +82,19 @@ $(document).ready(function() {
             
         });
     }
+    else{
+        $.ajax({
+            url: notesUrl + "lembrete",
+            type: "GET",
+            headers: {
+                "authorization": `Bearer ${getToken()}` 
+            },
+            success: showContent,
+            error: (error) => {
+                console.error("erro:", error);
+            }
+        })
+    }
     
     $.ajax({
         url:"https://ifsp.ddns.net/webservices/lembretes/usuario/check",
@@ -105,6 +118,56 @@ $(document).ready(function() {
     })
 
 })
+
+
+//Funções da página de lembretes----------------------------------------------------------------------------
+
+function registerReminder(){
+    let content = $("form textarea").val();
+    console.log(content, content.length);
+    if(content.length <= 255){
+        let options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({
+                texto: content
+            })
+        }
+        fetch(notesUrl + "lembrete", options)
+        .then(response => response.json())
+        .then(data => {
+            let reminderCard = $("<div>").addClass("reminder")
+            let taskDiv = $("<div>").addClass("task").text(data.texto)
+            let buttonsDiv = $("<div>").addClass("buttons")
+            let editBtn = $("<button>").append($("<img>").attr("src", "img/lapis.png"));
+            let deleteBtn = $("<button>").append($("<img>").attr("src", "img/lixeira-de-reciclagem.png"));
+        
+            buttonsDiv.append(editBtn).append(deleteBtn);
+            reminderCard.append(taskDiv).append(buttonsDiv);
+
+        $(".reminders").prepend(reminderCard);
+        })
+    }
+}
+
+function showContent(data){
+    console.log(data);
+    data.map(data => {
+        let reminderCard = $("<div>").addClass("reminder")
+        let taskDiv = $("<div>").addClass("task").text(data.texto)
+        let buttonsDiv = $("<div>").addClass("buttons")
+        let editBtn = $("<button>").append($("<img>").attr("src", "img/lapis.png"));
+        let deleteBtn = $("<button>").append($("<img>").attr("src", "img/lixeira-de-reciclagem.png"));
+        
+        buttonsDiv.append(editBtn).append(deleteBtn);
+        reminderCard.append(taskDiv).append(buttonsDiv);
+
+        $(".reminders").append(reminderCard);
+    })
+}
 
 
 //FUNÇÕES DE AUTENTICAÇÃO------------------------------------------------------------
