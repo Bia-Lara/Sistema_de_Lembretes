@@ -3,6 +3,7 @@ let button = $(".buttonForm")[0]
 let logout
 let pathname= window.location.pathname
 let notesUrl = "https://ifsp.ddns.net/webservices/lembretes/lembrete/";
+let tokenTimer = null
 
 //CHAMADAS DE FUNÇÕES---------------------------------------------------------------
 
@@ -24,6 +25,7 @@ form.addEventListener("submit", (e)=>{
 
     
 })
+
 button.addEventListener("click", (e)=>{
     e.preventDefault()
 
@@ -39,7 +41,6 @@ button.addEventListener("click", (e)=>{
         registerReminder()
     }
 })
-
 
 if(pathname.includes("/src/lembretes.html")){
     logout = $("#logout")[0]
@@ -81,6 +82,7 @@ if(pathname.includes("/src/lembretes.html")){
     $(document).on('click',".editBtn", function(e) {
         e.preventDefault();
         $('#janelaEdicao').css('display', 'block');
+        $('#janelaEdicaoFundo').css('display', 'block');
         let targetReminder = $(this).closest('[data-id]');
         let reminderId = targetReminder.attr('data-id');
         $('#btnAtualiza').data('targetReminder', targetReminder);
@@ -93,11 +95,13 @@ if(pathname.includes("/src/lembretes.html")){
         let reminderId = $(this).data('reminderId');
         editReminder(reminderId,targetReminder)
         $('#janelaEdicao').css('display', 'none');
+        $('#janelaEdicaoFundo').css('display', 'none');
     })
 
     $(document).on('click',"#fechar", function(e) {
         e.preventDefault();
         $('#janelaEdicao').css('display', 'none');
+        $('#janelaEdicaoFundo').css('display', 'none');
     })
 
     
@@ -218,6 +222,7 @@ function deleteReminder(reminderId,targetReminder){
         console.log(remove.msg)
     })
 }
+
 function editReminder(reminderId,targetReminder){
     let content = $("#editText").val();
     $('#editText').val('');
@@ -271,7 +276,9 @@ function login(){
             
             success: function(msg){
                 setToken(msg.token)
-                
+                setTokenExpirationTime(Date.now() + 180 * 1000)
+                clearInterval(tokenTimer)
+                startTokenTimer(180)
                 window.location.href = "lembretes.html"
             },
 
@@ -292,14 +299,8 @@ function register(){
     let senha = $('#password').val()
     let span= $("span")[0]
 
-    let senhaValida = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
     if(email=="" || senha==""){
         span.innerHTML = `Por favor preencha todos os campos! `
-        span.style.display="block"
-    }
-    else if(!senhaValida.test(senha)){
-        span.innerHTML = `Por favor insira uma senha válida<br>*Mínimo 6 caracteres<br>*Mínimo uma letra maiúscula<br>*Mínimo um número<br>*Mínimo um caractere Especial `
-       
         span.style.display="block"
     }else{
         $.ajax({
@@ -313,7 +314,7 @@ function register(){
 
             success: function(msg){
                 setToken(msg.token)
-                setTokenExpirationTime(Date.now() + 180 * 1000);
+                setTokenExpirationTime(Date.now() + 180 * 1000)
                 window.location.href = "lembretes.html"
             },
 
@@ -340,7 +341,9 @@ function updateToken(){
         success: function(msg){
             console.log(msg.token)
             setToken(msg.token)
-            setTokenExpirationTime(Date.now() + 180 * 1000);
+            setTokenExpirationTime(Date.now() + 180 * 1000)
+            clearInterval(tokenTimer)
+            startTokenTimer(180)
             window.location.href = "lembretes.html"
         },
 
@@ -387,23 +390,29 @@ function getTokenExpirationTime() {
     }
     return null;
 }
+function startTokenTimer(duration) {
+    let timer = duration, minutes, seconds;
+    let display = $("#timer");
 
-function startTokenTimer(duration){
-    let timer = duration, minutes, seconds
-    let display = $("#timer")
-    let countdown = setInterval(function () {
-        minutes = parseInt(timer / 60, 10)
-        seconds = parseInt(timer % 60, 10)
+    // Limpa o timer existente, se houver
+    if (tokenTimer) {
+        clearInterval(tokenTimer);
+    }
 
-        minutes = minutes < 10 ? "0" + minutes : minutes
-        seconds = seconds < 10 ? "0" + seconds : seconds
+    tokenTimer = setInterval(function() {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
 
-        display[0].textContent = `${minutes}:${seconds}`
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display[0].textContent = `${minutes}:${seconds}`;
 
         if (--timer < 0) {
-            clearInterval(countdown)
-            alert('Seu token expirou. Por favor, faça login novamente.')
-            window.location.href = "login.html"
+            clearInterval(tokenTimer);
+            alert('Seu token expirou. Por favor, faça login novamente.');
+            window.location.href = "login.html";
         }
     }, 1000);
 }
+

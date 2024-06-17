@@ -84,7 +84,7 @@ form{
     flex-wrap: nowrap;
     justify-content: center;
     width: 100%;
-    margin-top: 10vw;
+    
 }
 
 textarea{
@@ -96,6 +96,7 @@ textarea{
     background-color: #99ABF7;
     color: white;
     box-shadow: 0 2px 0 #0056b3;
+    margin-top: 20px;
 }
 
 form button{
@@ -203,6 +204,7 @@ form button:active{
     background-color: #fff;
     border: 3px solid #99ABF7;
     width: 415px;
+    
     border-radius: 15px;
     border-style: dashed;
     z-index: 200;
@@ -236,6 +238,10 @@ form button:active{
     color: #fff;
     outline: none;
     cursor: pointer;
+}
+
+#fechar p{
+    font-size: 1.5em;
 }
 
 #janelaEdicao form{
