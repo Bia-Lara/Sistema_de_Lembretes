@@ -1,25 +1,24 @@
-
 let form = $("form")[0]
 let button = $(".buttonForm")[0]
 let logout
 let pathname= window.location.pathname
-let notesUrl = "https://ifsp.ddns.net/webservices/lembretes/lembrete";
+let notesUrl = "https://ifsp.ddns.net/webservices/lembretes/lembrete/";
 
 //CHAMADAS DE FUNÇÕES---------------------------------------------------------------
 
 form.addEventListener("submit", (e)=>{
     e.preventDefault()
     
-    if(pathname=="/src/login.html"){
+    if(pathname.includes("/src/login.html")){
         login()
     }
 
-    if(pathname=="/src/cadastro.html"){
+    if(pathname.includes("/src/cadastro.html")){
         
         register()
     }
 
-    if(pathname=="/src/lembretes.html"){
+    if(pathname.includes("/src/lembretes.html")){
         registerReminder()
     }
 
@@ -28,20 +27,21 @@ form.addEventListener("submit", (e)=>{
 button.addEventListener("click", (e)=>{
     e.preventDefault()
 
-    if(pathname=="/src/login.html"){
+    if(pathname.includes("/src/login.html")){
         login()
     }
 
-    if(pathname=="/src/cadastro.html"){
+    if(pathname.includes("/src/cadastro.html")){
         register()
     }
 
-    if(pathname=="/src/lembretes.html"){
+    if(pathname.includes("/src/lembretes.html")){
         registerReminder()
     }
 })
 
-if(pathname=="/src/lembretes.html"){
+
+if(pathname.includes("/src/lembretes.html")){
     logout = $("#logout")[0]
 
     logout.addEventListener("click", (e)=>{
@@ -71,11 +71,40 @@ if(pathname=="/src/lembretes.html"){
         startTokenTimer(180); // 180 segundos = 3 minutos
     }
 
+    $(document).on('click',".deleteBtn", function(e) {
+            e.preventDefault();
+            let targetReminder = $(this).closest('[data-id]');
+            let reminderId = targetReminder.attr('data-id');
+            deleteReminder(reminderId,targetReminder)
+    })
+
+    $(document).on('click',".editBtn", function(e) {
+        e.preventDefault();
+        $('#janelaEdicao').css('display', 'block');
+        let targetReminder = $(this).closest('[data-id]');
+        let reminderId = targetReminder.attr('data-id');
+        $('#btnAtualiza').data('targetReminder', targetReminder);
+        $('#btnAtualiza').data('reminderId', reminderId);
+    })
+
+    $(document).on('click','#btnAtualiza',function(e){
+        e.preventDefault();
+        let targetReminder = $(this).data('targetReminder');
+        let reminderId = $(this).data('reminderId');
+        editReminder(reminderId,targetReminder)
+        $('#janelaEdicao').css('display', 'none');
+    })
+
+    $(document).on('click',"#fechar", function(e) {
+        e.preventDefault();
+        $('#janelaEdicao').css('display', 'none');
+    })
+
     
 }
 
 $(document).ready(function() {
-    if(pathname=="/src/login.html" || pathname=="/src/cadastro.html"){
+    if(pathname.includes("/src/login.html") || pathname.includes("/src/cadastro.html")){
         $('#email').inputmask({
             alias: "email",
             clearIncomplete: true
@@ -105,7 +134,7 @@ $(document).ready(function() {
 
         success:function(msg){
             console.log(msg)
-            if(pathname=="/src/login.html"){
+            if(pathname.includes("/src/login.html")){
                 if(msg.msg=='Você está logado'){
                     updateToken()
                 }
@@ -134,33 +163,32 @@ function registerReminder(){
             },
             body: JSON.stringify({
                 texto: content
-            })
+            }),
         }
         fetch(notesUrl + "lembrete", options)
         .then(response => response.json())
         .then(data => {
-            let reminderCard = $("<div>").addClass("reminder")
+            let reminderCard = $("<div>").addClass("reminder").attr("data-id",data.id);
             let taskDiv = $("<div>").addClass("task").text(data.texto)
             let buttonsDiv = $("<div>").addClass("buttons")
-            let editBtn = $("<button>").append($("<img>").attr("src", "img/lapis.png"));
-            let deleteBtn = $("<button>").append($("<img>").attr("src", "img/lixeira-de-reciclagem.png"));
+            let editBtn = $("<button>").addClass("editBtn").append($("<img>").attr("src", "img/lapis.png"));
+            let deleteBtn = $("<button>").addClass("deleteBtn").append($("<img>").attr("src", "img/lixeira-de-reciclagem.png"));
         
             buttonsDiv.append(editBtn).append(deleteBtn);
             reminderCard.append(taskDiv).append(buttonsDiv);
-
         $(".reminders").prepend(reminderCard);
         })
     }
 }
 
 function showContent(data){
-    console.log(data);
+    console.log(data)
     data.map(data => {
-        let reminderCard = $("<div>").addClass("reminder")
+        let reminderCard = $("<div>").addClass("reminder").attr("data-id",data.id);
         let taskDiv = $("<div>").addClass("task").text(data.texto)
         let buttonsDiv = $("<div>").addClass("buttons")
-        let editBtn = $("<button>").append($("<img>").attr("src", "img/lapis.png"));
-        let deleteBtn = $("<button>").append($("<img>").attr("src", "img/lixeira-de-reciclagem.png"));
+        let editBtn = $("<button>").addClass("editBtn").append($("<img>").attr("src", "img/lapis.png"));
+        let deleteBtn = $("<button>").addClass("deleteBtn").append($("<img>").attr("src", "img/lixeira-de-reciclagem.png"));
         
         buttonsDiv.append(editBtn).append(deleteBtn);
         reminderCard.append(taskDiv).append(buttonsDiv);
@@ -169,6 +197,57 @@ function showContent(data){
     })
 }
 
+function deleteReminder(reminderId,targetReminder){
+    let options = {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${getToken()}`
+        }
+    }
+
+    fetch(notesUrl + reminderId,options)
+    .then(response => {
+        if (!response.ok)
+        {
+            throw new Error("Ocorreu um erro!");
+        }
+        return response.json();
+    })
+    .then(remove => {
+        targetReminder.remove();
+        console.log(remove.msg)
+    })
+}
+function editReminder(reminderId,targetReminder){
+    let content = $("#editText").val();
+    $('#editText').val('');
+    if(content.length <= 255){
+        let options = {
+            method: "PUT",
+            body: JSON.stringify({
+                texto: content,
+            }),
+            headers: {
+                'Authorization': `Bearer ${getToken()}`,
+                "Content-Type":"application/json"
+            },
+        }
+        fetch(notesUrl+reminderId,options)
+            .then(response => {
+                if (!response.ok)
+                {
+                    throw new Error("Ocorreu um erro!");
+                }
+                return response.json();
+            })
+            .then(data => {
+                targetReminder.children('div:first').text(data.texto) 
+            })
+            .catch(error =>{
+                console.error("Erro encontrado: ",error);
+            })
+    }
+}
 
 //FUNÇÕES DE AUTENTICAÇÃO------------------------------------------------------------
 
