@@ -247,6 +247,7 @@ function editReminder(reminderId,targetReminder){
             })
             .then(data => {
                 targetReminder.children('div:first').text(data.texto) 
+                $("#IdTarefaEdicao").text(data.id);
             })
             .catch(error =>{
                 console.error("Erro encontrado: ",error);
@@ -409,10 +410,17 @@ function startTokenTimer(duration) {
         display[0].textContent = `${minutes}:${seconds}`;
 
         if (--timer < 0) {
-            clearInterval(tokenTimer);
-            alert('Seu token expirou. Por favor, faça login novamente.');
-            window.location.href = "login.html";
+            clearInterval(tokenTimer)
+            AlertModal()
         }
     }, 1000);
 }
 
+function AlertModal(){
+    $('#janelaAviso').css('display', 'block');
+    $('#janelaEdicaoFundo').css('display', 'block');
+
+    $('#buttonAviso').on('click', function(e){
+        window.location.href = "login.html"
+    })
+}

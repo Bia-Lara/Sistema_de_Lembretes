@@ -30,21 +30,30 @@
         </div>
 
         
-        <div id="janelaEdicao">
+        <div id="janelaEdicao" class="modal">
             <button id="fechar">
                 <p>x</p>
             </button>
     
-            <h2 id="IdTarefaEdicao">#111</h2>
+            <h2 id="IdTarefaEdicao"></h2>
     
             <hr>
     
             <form action="">
                 <textarea name="" id="editText" cols="80" rows="2" maxlength="255"></textarea>
-                <button id="btnAtualiza">Salvar</button>
+                <button id="btnAtualiza" class="buttonModal">Salvar</button>
             </form>
             
         </div>
+
+
+        <div id="janelaAviso" class="modal">
+            <p>Seu tempo acabou!! Faça login novamente.</p>
+
+            <button id="buttonAviso" class="buttonModal">OK</button>
+            
+        </div>
+    
     
         <div id="janelaEdicaoFundo"></div>
     </div>
