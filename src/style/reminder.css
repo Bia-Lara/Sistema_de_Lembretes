@@ -152,6 +152,15 @@ form button:active{
     
 }
 
+.reminder .data{
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 2px;
+    font-family: "Outfit", sans-serif;
+    font-size: 0.6em;
+}
+
 .reminder .buttons{
     bottom: 0;
     position: absolute;

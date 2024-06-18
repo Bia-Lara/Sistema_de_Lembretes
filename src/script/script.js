@@ -54,7 +54,7 @@ if(pathname.includes("/src/lembretes.html")){
             },
     
             success: function(msg){
-                console.log(msg)
+               
                 window.location.href = "login.html"
             },
     
@@ -85,6 +85,7 @@ if(pathname.includes("/src/lembretes.html")){
         $('#janelaEdicaoFundo').css('display', 'block');
         let targetReminder = $(this).closest('[data-id]');
         let reminderId = targetReminder.attr('data-id');
+        $('#IdTarefaEdicao').text(reminderId)
         $('#btnAtualiza').data('targetReminder', targetReminder);
         $('#btnAtualiza').data('reminderId', reminderId);
     })
@@ -122,7 +123,7 @@ $(document).ready(function() {
             headers: {
                 "authorization": `Bearer ${getToken()}` 
             },
-            success: showContent,
+            success:showContent,
             error: (error) => {
                 console.error("erro:", error);
             }
@@ -137,7 +138,6 @@ $(document).ready(function() {
         },
 
         success:function(msg){
-            console.log(msg)
             if(pathname.includes("/src/login.html")){
                 if(msg.msg=='Você está logado'){
                     updateToken()
@@ -157,7 +157,6 @@ $(document).ready(function() {
 
 function registerReminder(){
     let content = $("form textarea").val();
-    console.log(content, content.length);
     if(content.length <= 255){
         let options = {
             method: "POST",
@@ -186,16 +185,16 @@ function registerReminder(){
 }
 
 function showContent(data){
-    console.log(data)
     data.map(data => {
         let reminderCard = $("<div>").addClass("reminder").attr("data-id",data.id);
         let taskDiv = $("<div>").addClass("task").text(data.texto)
+        let dataDiv = $("<div>").addClass("data").text(data.data)
         let buttonsDiv = $("<div>").addClass("buttons")
         let editBtn = $("<button>").addClass("editBtn").append($("<img>").attr("src", "img/lapis.png"));
         let deleteBtn = $("<button>").addClass("deleteBtn").append($("<img>").attr("src", "img/lixeira-de-reciclagem.png"));
         
         buttonsDiv.append(editBtn).append(deleteBtn);
-        reminderCard.append(taskDiv).append(buttonsDiv);
+        reminderCard.append(taskDiv).append(dataDiv).append(buttonsDiv);
 
         $(".reminders").append(reminderCard);
     })
@@ -219,7 +218,7 @@ function deleteReminder(reminderId,targetReminder){
     })
     .then(remove => {
         targetReminder.remove();
-        console.log(remove.msg)
+        
     })
 }
 
@@ -247,7 +246,6 @@ function editReminder(reminderId,targetReminder){
             })
             .then(data => {
                 targetReminder.children('div:first').text(data.texto) 
-                $("#IdTarefaEdicao").text(data.id);
             })
             .catch(error =>{
                 console.error("Erro encontrado: ",error);
@@ -340,7 +338,6 @@ function updateToken(){
         },
 
         success: function(msg){
-            console.log(msg.token)
             setToken(msg.token)
             setTokenExpirationTime(Date.now() + 180 * 1000)
             clearInterval(tokenTimer)
@@ -417,8 +414,13 @@ function startTokenTimer(duration) {
 }
 
 function AlertModal(){
-    $('#janelaAviso').css('display', 'block');
-    $('#janelaEdicaoFundo').css('display', 'block');
+
+    if ($('#janelaEdicao').css('display') === 'block') {
+        $('#janelaEdicao').css('display', 'none')
+    }
+
+    $('#janelaAviso').css('display', 'block')
+    $('#janelaEdicaoFundo').css('display', 'block')
 
     $('#buttonAviso').on('click', function(e){
         window.location.href = "login.html"
