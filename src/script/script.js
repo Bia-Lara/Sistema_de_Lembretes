@@ -39,6 +39,7 @@ button.addEventListener("click", (e)=>{
 
     if(pathname.includes("/src/lembretes.html")){
         registerReminder()
+        
     }
 })
 
@@ -129,26 +130,26 @@ $(document).ready(function() {
             }
         })
     }
-    
-    $.ajax({
-        url:"https://ifsp.ddns.net/webservices/lembretes/usuario/check",
-        type: "GET",
-        headers: {
-            'Authorization': 'Bearer ' + getToken()
-        },
-
-        success:function(msg){
-            if(pathname.includes("/src/login.html")){
-                if(msg.msg=='Você está logado'){
-                    updateToken()
+    if(pathname.includes("/src/login.html")){
+        $.ajax({
+            url:"https://ifsp.ddns.net/webservices/lembretes/usuario/check",
+            type: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + getToken()
+            },
+            success:function(msg){
+                if(pathname.includes("/src/login.html")){
+                    if(msg.msg=='Você está logado'){
+                        updateToken()
+                    }
                 }
+            },
+            error:function(request, status, erro){
+                console.log(request.responseJSON.msg);
             }
-        },
-
-        error:function(request, status, erro){
-            console.log(erro)
-        }
-    })
+        
+        })
+    }
 
 })
 
@@ -157,7 +158,7 @@ $(document).ready(function() {
 
 function registerReminder(){
     let content = $("form textarea").val();
-    if(content.length <= 255){
+    if(content.length <= 255 && content.length > 0){
         let options = {
             method: "POST",
             headers: {
@@ -179,8 +180,12 @@ function registerReminder(){
         
             buttonsDiv.append(editBtn).append(deleteBtn);
             reminderCard.append(taskDiv).append(buttonsDiv);
-        $(".reminders").prepend(reminderCard);
+            $(".reminders").prepend(reminderCard);
+            $('textarea').val('');
         })
+    }
+    else{
+        alert("Erro! Conteudo vázio ou maior que 255 caracteres")
     }
 }
 
@@ -218,6 +223,7 @@ function deleteReminder(reminderId,targetReminder){
     })
     .then(remove => {
         targetReminder.remove();
+        AlertDel(remove.msg)
         
     })
 }
@@ -225,7 +231,7 @@ function deleteReminder(reminderId,targetReminder){
 function editReminder(reminderId,targetReminder){
     let content = $("#editText").val();
     $('#editText').val('');
-    if(content.length <= 255){
+    if(content.length <= 255 && content.length > 0){
         let options = {
             method: "PUT",
             body: JSON.stringify({
@@ -251,6 +257,10 @@ function editReminder(reminderId,targetReminder){
                 console.error("Erro encontrado: ",error);
             })
     }
+    else{
+        alert("Erro! Conteudo vázio ou maior que 255 caracteres")
+    }
+    
 }
 
 //FUNÇÕES DE AUTENTICAÇÃO------------------------------------------------------------
@@ -294,6 +304,7 @@ function login(){
 }
 
 function register(){
+    
     let email = $('#email').val();
     let senha = $('#password').val()
     let span= $("span")[0]
@@ -318,7 +329,8 @@ function register(){
             },
 
             error: function(request, status, erro){
-                console.log(erro)
+                span.innerHTML = request.responseJSON.msg
+                span.style.display="block"
             }
         })
     }
@@ -424,5 +436,22 @@ function AlertModal(){
 
     $('#buttonAviso').on('click', function(e){
         window.location.href = "login.html"
+    })
+}
+
+function AlertDel(msg){
+
+    if ($('#janelaEdicao').css('display') === 'block') {
+        $('#janelaEdicao').css('display', 'none')
+    }
+
+    $('#avisoDelete').css('display', 'block')
+    $('#janelaEdicaoFundo').css('display', 'block')
+    $('#deleteMsg').text(msg);
+
+    $('#buttonDel').on('click', function(e){
+        $('#avisoDelete').css('display', 'none')
+        $('#janelaEdicaoFundo').css('display', 'none')
+        $('#janelaEdicao').css('display', 'none')
     })
 }

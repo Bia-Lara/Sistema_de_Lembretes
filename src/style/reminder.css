@@ -285,17 +285,17 @@ form button:active{
     outline: none;
 }
 
-#janelaAviso{
+#janelaAviso, #avisoDelete{
    text-align: center;
 }
 
-#janelaAviso p{
+#avisoDelete p, #janelaAviso p{
     font-size: 2em;
     font-family: "Outfit", sans-serif;
     padding: 20px;
 }
 
-#janelaAviso button{
+#avisoDelete button, #janelaAviso button{
     width: 6em;
     height: 2em;
     background: #99ABF7;
